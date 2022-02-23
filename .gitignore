@@ -1,0 +1,4 @@
+data/
+queries/spark-warehouse/
+outputs/.*
+joins/spark-warehoues/
