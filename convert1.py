@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName('covert1').getOrCreate()
+spark = SparkSession.builder.appName('convert1').getOrCreate()
 
 sc  =spark.sparkContext
 

@@ -51,10 +51,11 @@ query = 'select genre, user_id, first(plithos) as plithos, \
         from \
         (select movie_id, genre, user_id, rating, plithos \
         from \
-        (select movie_id, genre, user_id, rating, plithos, max(plithos) over (partition by genre) as max_plithos from \
-        (select movie_id, genre, user_id, rating, count(rating) over (partition by genre, user_id) as plithos\
+        (select movie_id, genre, user_id, rating, plithos, max(plithos) over (partition by genre) as max_plithos, \
+        first(user_id) over (partition by genre order by plithos desc, user_id desc) as max_user_id from \
+        (select movie_id, genre, user_id, rating, count(rating) over (partition by genre, user_id) as plithos \
         from ratings natural join genres)) \
-        where plithos = max_plithos) natural join movies \
+        where plithos = max_plithos and user_id = max_user_id) natural join movies \
         window w_best as (partition by genre, user_id order by rating desc, popularity desc), \
         w_worst as (partition by genre, user_id order by rating asc, popularity desc)) \
         group by genre, user_id \
@@ -70,3 +71,4 @@ elif parquet == 'T':
 end = time.time() - start
 f.write(str(end)+"\n")
 f.close()
+

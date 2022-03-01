@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName("covert-csv2parquet").getOrCreate()
+spark = SparkSession.builder.appName("convert-csv2parquet").getOrCreate()
 
 #load csvs
 movies = spark.read.csv("hdfs://master:9000/files/movies.csv", header=False, inferSchema=True)

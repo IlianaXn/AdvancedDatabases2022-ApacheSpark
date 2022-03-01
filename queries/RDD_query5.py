@@ -26,7 +26,7 @@ movies = sc.textFile('hdfs://master:9000/files/movies.csv'). \
 #(movie_id, (name, popularity))
 
 ratings = sc.textFile('hdfs://master:9000/files/ratings.csv'). \
-          map(lambda x: (x.split(',')[1], (x.split(',')[0], float(x.split(',')[2]))))
+          map(lambda x: (x.split(',')[1], (int(x.split(',')[0]), float(x.split(',')[2]))))
 
 #(movied_id, (user_id, rating))
 
@@ -34,7 +34,7 @@ result1 = genres.join(ratings). \
         map(lambda x: ((x[1][0], x[1][1][0]), (x[1][1][1], x[0]))). \
         groupByKey(). \
         map(lambda x: (x[0][0], (x[0][1], x[1], len(x[1])))). \
-        reduceByKey(lambda maxv, x: x if x[2] > maxv[2] else maxv). \
+        reduceByKey(lambda maxv, x: x if (x[2], x[0]) > (maxv[2], maxv[0]) else maxv). \
         flatMap(lambda x: [(tainia, (kritiki, x[0], x[1][0], x[1][2])) for kritiki, tainia in x[1][1]]). \
         join(movies). \
         map(lambda x: ((x[1][0][1], x[1][0][2], x[1][0][3]), (x[1][1][0], x[1][0][0], x[1][1][1])))

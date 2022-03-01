@@ -8,7 +8,7 @@ start = time.time()
 
 spark = SparkSession.builder.appName('RDD_query3').getOrCreate()
 
-sc  =spark.sparkContext
+sc = spark.sparkContext
 
 
 genres = sc.textFile('hdfs://master:9000/files/movie_genres.csv'). \
